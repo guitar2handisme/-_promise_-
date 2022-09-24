@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // #region 【1：函数为什么是一个对象】
+    /*
+      问？函数为什么是一个对象
+      答：1->因为函数可以理解是内置的构造函数 Object new 出来的一个实例对象
+    */
+      function fn() {};
+      let res = fn instanceof Object;
+      console.log(res) // true
+
+    /*
+      答：2->每一个函数都有一个 prototype 属性，且 prototype 是一个对象；
+             每一个对象都有一个 __proto__ 属性，该属性指向构造出该对象的构造函数的 prototype；
+            （即__proto__ 与 prototype 引用同一个对象的地址）；
+            fn.__proto__ === Object.prototype
+      注意：现在版本的 Google 浏览器， [[prototype]] 代替了 __proto__
+            但其作用是一样的
+    */
+      let res2 = fn.prototype.__proto__ === Object.prototype
+      console.log(res2)
+      console.dir(fn)
+    // #endregion
+  
+    // #region 【2: 函数当作普通对象来用】
+    /*
+      问？函数如何当作普通对象来使用
+      答：直接可以给一个函数添加私有属性
+    */
+      function fn2() {}
+      fn2.type = '函数声明出的【普通函数】'
+      console.log(fn2.type) // '函数声明出的【普通函数】'
+      
+    /*
+      注意：函数的 【name】 属性，是不可重写属性，
+          所以通过 函数.name 对其进行修改是不会起作用的
+    */
+      console.log(Object.getOwnPropertyDescriptor(fn2, 'name')) // writable: false
+      fn2.name = 'fumction'
+      console.log(fn2.name) // fn2 
+    // #endregion
+  
+    
+  </script>
+</body>
+</html>

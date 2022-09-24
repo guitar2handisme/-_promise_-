@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    //==========================================================================================================================================
+    /*
+    问：Promise.resovle(value) 和 Promise.reject(reason) 是哪里的方法
+    答：是函数对象 Promise 自身上的方法
+    */
+    /* const resolveDescriptor = Object.getOwnPropertyDescriptor(Promise, 'resolve');
+    console.log(resolveDescriptor) // {configurable: true，enumerable: false，writable: true } */
+    //==========================================================================================================================================
+    
+    
+    //==========================================================================================================================================
+    /*
+    问：Promise.resovle(valueP) 该方法是做什么的？
+    答：
+      1：当 valueP 为非 Promise 实例时：
+          该方法一执行，就可以立即得到一个，状态为 fulfilled 的 Promise 实例
+          且该实例成功的 value 就是 valueP 
+          注意😂：得到的该实例没有状态切换的过程，即一下来该实例状态就是 fulfilled
+      2.1：当 valueP 为 Promise 实例时, 且该实例状态为 rejected 时：
+            该方法一执行，就可以立即得到一个，状态为 rejected 的 Promise 实例
+            且该实例失败的 reason 就是，valueP 传入的 reason
+      2.2：当 valueP 为 Promise 实例时, 且该实例状态为 fulfilled 时：
+            该方法一执行，就可以立即得到一个，状态为 fulfilled 的 Promise 实例
+            且该实例成功的 value 就是，valueP 传入的 value
+    */
+    // #region
+    // 1:
+    /* const valueP = '状态：fulfilled'
+    const p = Promise.resolve(valueP)
+    console.log(p) // Promise { <fulfilled>: '状态：fulfilled' } */
+
+    // 2.0
+    /* const valueP = new Promise((resolve, reject) => {})
+    const p = Promise.resolve(valueP)
+    console.log(p) // Promise {<pending>} */
+
+    // 2.1：
+    /* const valueP = Promise.reject('状态：rejected')
+    const p = Promise.resolve(valueP)
+    console.log(p) // Promise {<rejected>: '状态：rejected'}  */
+
+    /* // 2.2：
+    const valueP = Promise.resolve('状态：fulfilled')
+    const p = Promise.resolve(valueP)
+    console.log(p) // Promise { <fulfilled>: '状态：fulfilled' } */
+    // #endregion
+    //==========================================================================================================================================
+    
+    
+    //==========================================================================================================================================
+    /*
+    问：Promise.reject(reason) 该方法是做什么的？
+    答：无论reason 是什么值，
+        该方法一执行，就可以立即得到一个，状态为 rejected 的 Promise 实例
+        且该实例失败的 reason 就是，就是传入的 reason 
+        注意😂：得到的该实例没有状态切换的过程，即一下来该实例状态就是 rejected
+    */
+    /* const p = Promise.reject('状态：rejected')
+    p.catch(
+      (reason) => console.log(reason) // 状态：rejected --> 后打印
+    )
+    console.log(p) // Promise {<rejected>: '状态：rejected'} --> 后打印 */
+    //==========================================================================================================================================
+    
+    
+    
+  </script>
+</body>
+</html>

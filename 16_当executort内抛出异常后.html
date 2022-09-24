@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    //==========================================================================================================================================
+    /*
+    问：当 executor 内部抛出异常【js抛或自己都算】时，promise 实例的状态是怎么改变的？
+    答：1：throw 自抛异常 或 js抛出异常
+            1.1：如果这时的 promise 实例是 pending，然后在 executor 内抛出异常
+            那么实例的状态会变为 pending ，且异常的 reason是抛出的错误对象或错误的值
+            1.2：如果这时的 promise 实例已经切换到 fulfilled 后，在抛出异常
+            那么实例的状态是不会在改变了【因为promise实例的状态只能改变一次】
+        注意：一旦 executor 内抛出异常，那么在它之后的代码将不再往下执行了。
+    */
+    // 1.1：
+    const p1 = new Promise((resolve, reject) => {
+      // throw new Error('人工抛出的错误')
+      console.log(a)
+    })
+    p1.then(
+      value => console.log(value, p1),
+      reason => console.log(reason, p1)
+    )
+    // 1.2
+    /* const p1 = new Promise((resolve, reject) => {
+      resolve('seccess')
+      console.log(a)
+      console.log(1111)
+    })
+    p1.then(
+      value => console.log(value, p1),
+      reason => console.log(reason, p1)
+    ) */
+    //==========================================================================================================================================
+    
+    
+    
+  </script>
+</body>
+</html>

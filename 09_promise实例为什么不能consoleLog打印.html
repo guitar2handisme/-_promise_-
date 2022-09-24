@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // #region 【】
+    //==========================================================================================================================================
+    /*
+      问：promise实例为什么不能consoleLog打印?
+      答：因为实例的状态改变，一般都是在异步回调里进行的
+          但一般的打印都是在主线程的代码，主线程的执行完才回去
+          任务队列中执行改变实例的异步回调
+    */
+    const p = new Promise((resolve, reject) => {
+      setTimeout(()=>{
+        console.log('settimeout执行了')
+        resolve("成功了")
+      }, 5000)
+    })
+    .then(
+      // (value)=>{console.log(value, p)},
+      (value)=>{ setTimeout(()=> {console.log(value, p)}, 0) },
+      ()=>{}
+    )
+    console.log(p)
+    //==========================================================================================================================================
+    // #endregion
+  </script>
+</body>
+</html>

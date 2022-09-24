@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // #region 【1: js 如何捕获一个错误】
+      /*
+        问：为什么要捕获错误？
+        答：因为有些代码程序员不确定会不会出错
+            所以为了保证程序的正常往下执行
+            会对这部分不确定的代码进行错误捕获
+            一旦捕获到错误，程序就可以越过这段代码
+            继续往下执行，保证整个程序的正常运行
+      */
+     /*
+      问：try{}catch(err){}是怎么执行的？
+      答：一旦try{}里面出现错误，就会立即停止try{}里面的代码（错误后面的代码都不会被执行）
+          去调用执行catch{}里的代码，对try里的代码进行人工的错误捕获
+      特点：被捕获到的错误消息不再是为红色的警告色出现，而是以正常的打印黑色字体出现
+            并且不会出现 Uncaught 这个字段，且代码执行不会在错误处停止，而是跳过错误代码继续往下执行
+      注意：try{}里面如果出现语法错误的代码，错误对象将不会被catch(){}捕获到，
+            而且在js【词法预解析】阶段就会停止执行，也就是整个程序在预解析阶段就会被停止，
+            代码一行也不会被执行到
+     */
+      console.log('我是第一行代码')
+      try {
+        function add(params) {
+          if (true) {
+            add(params)
+          }
+        }
+       add(1)
+       console.log('fyfyfyf')
+      } catch (error) {
+        console.log(error) // ReferenceError: a is not defined
+        console.log(typeof error) // object
+      }
+      console.log(123)
+      /* try {
+        console.log(a
+      } catch (error) {
+        console.log(error)
+      } */
+    // #endregion
+  </script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    //==========================================================================================================================================
+    /*
+    问：async 是什么？
+    答：【async 是一个修饰符】，一般用于修饰一个函数
+    问：async 修饰的函数的返回值，将是一个 promise 实例吗？
+    答：是的。该实例的状态根据修饰的这个函数的返回值类型来进行改变
+        1：没有返回值，或 返回非 promise 实例类型的值，该实例的状态为 fulfilled，
+        value 就是返回的值
+        2：返回 promise 实例类型的值，该实例的状态和该函数返回的 promise 实例状态一样，
+        value 或 reason 也一样
+    */
+    /* // 1：
+    async function name() {
+      // return 234
+      return Promise.reject('失败')
+    }
+    const sy1 = name(234)
+    sy1.then(
+      value => {
+        console.log(value)
+        console.log('sy1: ', sy1);
+      },
+      reason => {
+        console.log(reason)
+        console.log('sy1: ', sy1);
+      }
+    ) */
+
+    /* // 2：
+    ;const sy2 = (async()=>{
+      // return 123;
+      return Promise.resolve('成功')
+    })()
+    sy2.then(
+      value => {
+        console.log(value)
+        console.log('sy2: ', sy2);
+      },
+      reason => {
+        console.log(reason)
+        console.log('sy2: ', sy2);
+      }
+    )
+    console.log('主线程sy2: ', sy2); */
+    //==========================================================================================================================================
+    
+    
+    //==========================================================================================================================================
+    /*
+    问：async 的使用场景是什么？
+    答：一旦一个函数的内部要用 await 语句，去等待一个成功的 Promise 实例
+       这时这个函数一定要使用 async 进行修饰，
+       不然会报错 [Uncaught SyntaxError: 未捕获的语法错误]，
+    */
+    /* function name() {
+      await new Promise((resolve, reject) => {
+        resolve('状态切为-->fulfilled; ')
+      })
+    }
+    const sy1 = name(234) */
+     
+    //==========================================================================================================================================
+    
+    
+    
+  </script>
+</body>
+</html>

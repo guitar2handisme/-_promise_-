@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // #region 【】
+    //==========================================================================================================================================
+    /*
+      问：then 方法在哪？
+      答：在构造函数 Promise 的原型对象上，
+          所以每一个 new 出来的 Promise 实例都可以访问调用到
+    */
+    /* let pp = new Promise(() => {})
+    console.log(Promise.prototype.then  ) // ƒ then() { [native code] }
+    console.log(Promise.prototype.then === pp.then ) // true */
+
+    //==========================================================================================================================================
+      
+      
+      
+    //==========================================================================================================================================
+    /*
+      问：then 方法有几个参数，分别是什么？
+      答：有 2 个参数，都是函数
+      问：这两个函数是什么函数？
+      答：都是回调函数
+      问：这两个回调函数在什么样的情况下被调用？
+      答：1：第一个回调，在promise实例状态从 padding ---> fulfilled 后被调用
+          2：第二个回调，在promise实例状态从 padding ---> rejectd 后被调用
+      问：这两个回调是同步的还是异步的
+      答：都是异步的回调
+      问：这两个回调函数有几个参数【形参】
+      答：这两个回调都只有一个参数, 
+          第一个回调的参数：为 promise 实例状态为 fulfilled 后的 成功的 value ---> 即 执行 resolve(value)函数 时的实参 value
+          第二个回调的参数：为 promise 实例状态为 rejected 后的 失败的 reason ---> 即 执行 reject(reason)函数 时的实参 reason
+    */
+    /* const p = new Promise((resolve, reject) => {
+      resolve('成功')
+    })
+    p.then(
+      (value)=>{ console.log(value) }, 
+      (reason)=>{ console.log(reason) }
+    )
+    console.log(112233) // 打印顺序 112233  -->  '成功' */
+    //==========================================================================================================================================
+      
+      
+      
+    //==========================================================================================================================================
+    /*
+      问：promise 实例的状态切换有什么特点？
+      答：只能从 pending ---切换到--> fulfilled 或 pending ---切换到--> rejected
+          【注意：不能在 fulfilled 和 rejected 之间来回切换】
+      问：以下代码的 console.log 顺序是怎么样的
+      答：'executor' ---> 11111 --> '定时器内的回调' ---> '成功了
+    */
+    /* const p = new Promise((resolve, reject) => {
+      console.log('executor')
+      setTimeout(() => {
+        resolve('成功了')
+        reject('失败了')
+        console.log('定时器内的回调')
+      }, 1000)
+    })
+    p.then(
+      (value) => { 
+        console.log(value) // 打印出 '成功了'， 说明状态从 pending 切到了 fulfilled
+      },
+      (reason) => { 
+        console.log(reason) // 没被打印, 说明没有被执行，说明状态不能在 fulfilled 和 rejected 之间切换
+      }
+    )
+    console.log(11111) */
+    //==========================================================================================================================================
+      
+      
+      
+    //==========================================================================================================================================
+    /*
+      问：一个 promise 实例，如果多次调用 then 方法，会出现什么情况？
+      答：那么被 then 方法管理的的两回调也会被多次调用
+    */
+    const p = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('成功了')
+      }, 1000)
+    })
+    p.then(
+      value => console.log('1--->',value),
+      reason => console.log(reason)
+    )
+    p.then(
+      value => console.log('2--->',value),
+      reason => console.log(reason)
+    )
+    //==========================================================================================================================================
+    // #endregion
+  </script>
+</body>
+</html>

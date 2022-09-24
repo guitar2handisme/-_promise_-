@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    //==========================================================================================================================================
+    /*
+    问：下列 asyncFunc 函数是瞬间就执行完的，还是要等 p 状态变为 fulfilled 才执行完的？
+    答：是瞬间就执行完的。
+    为什么：对比下面的 【promise 翻译后代码】与 【promise 翻译前代码】的代码发现
+    【await promise实例】其实是 【promise实例.then(fulfilledCallback)】的语法糖。
+    asyncFunc 函数执行其实就是将 p.then 方法执行了【该方法执行，就是往当前的这个promise实例
+    p 上存储异步函数 --> p.list = [[()=>{}, reason => throw reason]]】
+    */
+    const p = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('状态切为成功-->fulfilled; ')
+      }, 2000);
+    })
+    async function asyncFunc() {
+      /* // 【promise 翻译后代码】
+      const awaitRes = await p
+      console.log('awaitRes:', awaitRes)
+      console.log('p:', p) */
+
+      // 【promise 翻译前代码】
+      p.then(
+        awaitRes => {
+          console.log('awaitRes:', awaitRes)
+          console.log('p:', p)
+        }
+      )
+    }
+    asyncFunc()
+    console.log('我是主线程打印')
+    //==========================================================================================================================================
+    
+    
+    
+  </script>
+</body>
+</html>

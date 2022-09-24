@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    //==========================================================================================================================================
+    /*
+    问：await 表达式右侧一般可以是什么？
+    答：一般是一个 promise 实例，但也可以是其它类型的数据（一般不这样写）
+        1：如果await右边的是 promise 实例，那么 await 后，这个 await 表达式的返回值就是
+        该 promise 实例 fulfilled 的 value
+        2：【注意😡】await 是等不到右边的 promise 实例切换成失败【rejected】后，的 reason 的。
+        只要 await 右边的 promise 实例切换成的状态为失败，那么 await 之后的代码就都不会被执行了，
+        且会立即抛出错误【Uncaught (in promise) reason;】，该抛出的错误需要用 try_catch 进行捕获，
+        就不会报错了，这里的 try_catch 相当于 .ten() | .catch() 方法里的失败的回调。
+        3: 如果 await 右侧的是其它类型数据，那么 await 后，
+        这个 await 表达式会立刻将这个【其它类型的值】返回（不推荐这么些）
+       
+    */
+    /* // 1：
+    async function name() {
+      const awaitRes = await new Promise((resolve, reject) => {
+        resolve('状态切为成功-->fulfilled; ')
+      })
+      console.log('awaitRes: ', awaitRes)
+    }
+    name() */
+
+    /* // 2：
+    async function name() {
+      try {
+        const awaitRes = await new Promise((resolve, reject) => {
+          reject('状态切为失败-->rejected;' )
+        })
+      } catch (error) {
+        console.log('error: ', error)
+      }
+    }
+    name()
+    console.log('主线程的') */
+
+    /* // 3：
+    async function name() {
+      const awaitRes = await 123
+      console.log('awaitRes: ', awaitRes)
+    }
+    name() */
+    //==========================================================================================================================================
+    
+    
+    
+  </script>
+</body>
+</html>

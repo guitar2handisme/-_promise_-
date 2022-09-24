@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    function requestGet(resolve,reject){
+      let xhr = new XMLHttpRequest()
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+          console.log('@@@@@')
+          if(xhr.status >= 200 && xhr.status <300) {
+            let responseData = xhr.response
+            console.log(responseData)
+            resolve(responseData)
+          } else {
+            reject('请求失败了')
+          }
+        }
+      }
+      xhr.open('GET', 'http://127.0.0.1:8081/test_get')
+      xhr.responseType = 'json'
+      xhr.send()
+    }
+    const p = new Promise((resolve, reject) => {
+      requestGet(resolve, reject)
+    })
+    p.then(
+      (value) => console.log('请求成功---》', value),
+      (reason) => console.log('请求失败---》', reason)
+    )
+  
+  </script>
+</body>
+</html>

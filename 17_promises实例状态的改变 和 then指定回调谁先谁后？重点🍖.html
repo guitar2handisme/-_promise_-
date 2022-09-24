@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    //==========================================================================================================================================
+    /*
+    前情提要：
+    注意：【promise 回调队列】和 【js 任务队列】 是两处地方，不是一个队列
+    问：【promises实例状态的改变】 和【then指定回调到 promise 回调队列】谁先谁后？
+    答：1：通常情况时【指定回调】在 【状态改变】前。
+          new 一个 promise 实例；
+          立即执行同步回调 executor, 执行 setTimeout 函数，开启一个定时器；
+          会有一个【定时器管理模块】，将执行 setTimeout 函数时生成的【异步回调】存在自身上；
+          【定时器管理模块】会进行计时，当 200 时，【定时器管理模块】会将这个 【异步回调】push 进 【宏任务队列】
+          执行 p1.then() 方法，执行完该方法后，会将该方法生成的两个【异步回调】存在 p1 自身 
+          p1.list = [[fulfilled()=>{}, ejected()=>{}]];
+          这时主线程代码已执行完毕，就去宏任务队列执行宏任务，在刚要当前宏任务前，会先看看微任务有没有要执行的，
+          这时微任务是空的，就会回到宏任务队列，继续将这个宏任务拉到主线程执行，执行 resolve('状态切为-->fulfilled; ') 完后 ，
+          p1 的状态变为成功 fulfilled，只要 p1 状态一改变，就会拿出 p1.list 身上的对应的回调，push 进
+          【微任务队列】，
+          又因为这时主线程已经没有代码执行了，所以 js 就会去拉微任务 value => console.log(value, '；', p1) 到主线程执行
+          
+       2：也可以给 then 包一个定时器，让【promises实例状态的改变】在前
+           或者 executor 内部不包装异步操作，让状态改变立即执行。
+           new 一个 promise 实例；
+          立即执行同步回调 executor 函数, 执行 resolve('状态切为-->fulfilled; ') 完后， p1 的状态变为成功 fulfilled;
+          执行 p1.then() 方法，执行完该方法后，发现 p1 的状态已经变为成功，所以就不会将生成的两个回调往自身上挂了，
+          而是直接将成功的回调 push 进【微任务对列】，
+          这时主线程代码已执行完毕，就去宏任务队列执行宏任务，在刚要当前宏任务前，会先看看微任务有没有要执行的，
+          这时发现【微任务队列】有一个微任务 value => console.log(value, '；', p1), 就会拉到主线程执行掉。
+    */
+    /* // 1：
+    const p1 = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('状态切为-->fulfilled; ')
+      }, 200);
+    })
+    p1.then(
+      value => console.log(value, '；', p1),
+      reason => console.log(reason, '；', p1),
+    ) */
+
+    /* // 2：
+    const p1 = new Promise((resolve, reject) => {
+      resolve('状态切为-->fulfilled; ')
+    })
+
+    p1.then(
+      value => console.log(value, '；', p1),
+      reason => console.log(reason, '；', p1),
+    ) */
+    //==========================================================================================================================================
+    
+    
+    
+  </script>
+</body>
+</html>

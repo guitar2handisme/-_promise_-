@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    //==========================================================================================================================================
+    /*
+    问：Promise.all([p1,p2,p3]) 和 Promise.race([p1,p2,p3]) 是哪里的方法
+    答：是函数对象 Promise 自身上的方法
+    */
+    //==========================================================================================================================================
+    
+    
+    //==========================================================================================================================================
+    /*
+    问：Promise.all([p1,p2,p3]) 该方法是做什么的？
+    答：1：用于将一个或多个 Promise 实例放到一个数组里，作为该方法的实参传入
+        该方法会返回一个全新的 Promise 实例
+        该实例的状态取决于传入的这组 Promise 实例的状态
+        只有当这组实例的状态都为 fulfilled 时，
+        该实例的状态才为 fulfilled， 且 fulfilled 的值为
+        传入的这组每一个 Promise 实例的 fulfilled 的值组成的数组
+        2：【注意】只要遇到这组的 promise 实例状态有一个为 rejected
+        那么这个方法会立即停止执行【这里立即停止意思是：不会再吧这组promise实例数组后面的状态结果push到这个方法的reason里了】
+        ，且返回一个全新的状态为 rejected 的 promise 实例
+        且这个全新的实例的 reason 不再是一个数组，而是第一次遇到的那个状态为 rejected 的实例的 reason
+    */
+    /* // 1:
+    const p1 = Promise.resolve('p1')
+    const p2 = new Promise((resolve, reject) => {
+      resolve('p2')
+    })
+    const p3 = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('p3')
+      }, 200);
+    })
+    
+    let allStatus = Promise.all([p1,p2,p3])
+    allStatus.then(
+      value => console.log(allStatus, value) //Promise {<fulfilled>: Array(3)}  ['p1', 'p2', 'p3']
+    ) */
+    /* // 2：
+    const p1 = Promise.resolve('p1')
+    const p2 = new Promise((resolve, reject) => {
+      reject('失败p2')
+    })
+    const p3 = new Promise((resolve, reject) => {
+      console.log(111)
+      setTimeout(() => {
+        reject('失败p3')
+        console.log(222)
+      }, 200);
+    })
+    
+    let allStatus = Promise.all([p1,p2,p3])
+    allStatus.then(
+      value => console.log(value, allStatus),
+      reason => console.log(reason, allStatus)
+    ) */
+    //==========================================================================================================================================
+    
+    
+    //==========================================================================================================================================
+    /*
+    问：Promise.race([p1,p2,p3]) 该方法是做什么的【race：角逐】？
+    答：该方法返回一个全新的 promise 实例，且该实例的状态取决于传入的这组实例的哪一个状态变得最快
+        无论跑的最快的那个实例的状态是什么，
+        该方法返回的实例的状态都和这个跑的最快的状态一样， value 或 reason 也和他一样
+       看 promise 实例 p1,p2,p3 那个状态切换成 fulfilled 最快
+    */
+    /* const p2 = new Promise((resolve, reject) => {
+      console.log(111)
+      setTimeout(() => {
+        resolve('p2')
+      }, 300);
+    })
+    const p3 = new Promise((resolve, reject) => {
+      console.log(222)
+      setTimeout(() => {
+        resolve('p3')
+        console.log(333)
+      }, 200);
+    })
+    console.log(444)
+    let raceStatus = Promise.race([p2,p3])
+    raceStatus.then(
+      value => console.log(raceStatus, value),
+      reason => console.log(raceStatus, reason)
+    ) */
+    //==========================================================================================================================================
+    
+    
+    
+  </script>
+</body>
+</html>

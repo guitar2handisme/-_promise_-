@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>1_ajax小试牛刀</title>
+    <script type="text/javascript" src="./jquery.min.js"></script>
+	</head>
+<body>
+  
+  <h3>该页面是测试：ajax小试牛刀</h3>
+  <script>
+    // #region 【（抽象的解释）primise 是什么？】
+    //==========================================================================================================================================
+    /*
+      问：primise 是什么？
+      答：（抽象的解释）promise是js中，进行异步编程的新方案
+      问：那么问题来了，【旧方案】是什么？
+      答：旧的方案是--》【纯】回调函数；
+          比如AJAx里的成功的回调函数【success】
+          或失败的回调函数【error】
+    */
+    $.ajax({
+      method: "GET",
+      url:'http://127.0.0.1:8081/test_jquery_get',
+      dataType: 'json',
+      timeout:2000,
+      data: {
+        request: 'get请求',
+        params: 'query参数方式传参'
+      },
+      success:(res) => {
+        console.log(res)
+      },
+      error: (xhr,message) => {
+        // xhr ----> 本次请求的 XMLHttpRequest 的实例
+        console.log('xhr-->', xhr)
+        console.log('message-->', message)
+      }
+    })
+    console.log(11233)
+    /*
+      问：那么 primise 进行异步编程的具体方案是什么？
+      答：回调函数 + 一些别的东西[promise的实例状态]
+    */
+    //==========================================================================================================================================
+    // #endregion
+  
+  
+    // #region 【(具体来说) promise 是什么？】
+    //==========================================================================================================================================
+    /*
+      问：(具体来说) promise 是什么？
+      答：1：从语法上来说：promise 是一个 内置构造函数【不是我们自己定义的，是js已经定义好的】
+          2：从功能上来说：promise 实例对象，可以用来封装一个异步操作，
+             并且可以获取该异步操作 成功 或 失败 的值
+    */
+    console.log(Promise) // ƒ Promise() { [native code] }
+    //==========================================================================================================================================
+      
+      
+      
+    //==========================================================================================================================================
+    /*
+     1: promise 不是一个回调函数，他是一个构造函数
+     2：构造函数 Promise 在 new 的时候，
+        必须传一个函数[executer]作为实参，否则会报错
+     3: executer 是一个回调函数，且是一个 【同步回调函数】 
+     4: executer 会接收 两个参数，它们都是函数【js内部定义好的函数，我们直接调用即可】
+        分别用我们自己定义的形参 resolve reject 去接收
+     5：每一个 new 出来的 Promise 实例都有 3 种状态，为如下 3 种
+        1：new 出来的那一刻，为初始化状态【padding】
+        2：程序员自己手动调用 resolve 后，变为成功状态 【fulfilled | resolved】, 
+           调用时可以指定成功的value 【resolve(value)】
+        3：程序员自己手动调用 reject 后，变为失败状态 【rejected】 ，
+           调用时可以指定失败的原因(reason) 【reject(reason)】
+           注意：promise 实例最好不要用 console.log 去打印
+                因为 一旦 reject(reason) 被调用，而没有对应的回调函数去接收，js 引擎就会抛出一个未捕获的错误
+                【注意：该抛出的错误并不会阻断程序的运行】
+    */
+    // 2：
+    try {
+      let p = new Promise()
+    } catch (error) {
+      // debugger
+      console.log(error) // TypeError: Promise resolver undefined is not a function
+    }
+    // 3：
+    let p2 = new Promise(() => {
+      console.log('executer执行')
+    })
+    console.log('我是主线程上的代码')
+    // 4:
+    let p3 = new Promise((resolve, reject) => {
+      console.log(resolve, reject) // ƒ () { [native code] } ƒ () { [native code] }
+    })
+    // 5:
+    // 5 --1:
+    let p4 = new Promise(() => {})
+    console.log(p4) // Promise {<pending>}
+    // 5 --2:
+    let p5 = new Promise((resolve, reject) => {
+      resolve('value')
+    })
+    console.log(p5) // Promise {<fulfilled>: 'value'}
+    // 5 --3:
+    let p6 = new Promise((resolve, reject) => {
+      reject('失败的原因')
+    })
+    console.log(p6) // Promise {<fulfilled>: 'value'}
+    console.log('我是主线程上的，会被执行到吗')
+    let arr = [1,2,3]
+    arr.forEach(item => console.log(item));
+    //==========================================================================================================================================
+    // #endregion
+  </script>
+</body>
+</html>

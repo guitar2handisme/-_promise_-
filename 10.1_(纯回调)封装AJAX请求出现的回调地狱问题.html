@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+
+    function sendAjaxGet(url, data, success, error){
+
+      const xhr = new XMLHttpRequest()
+
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+          if (xhr.status >= 200 && xhr.status < 300) success(xhr.response)
+          else error('失败了')
+        }
+      }
+
+      let str = ''
+
+      for (const key in data) {
+        if (Object.hasOwnProperty.call(data, key)) {
+          str += `${key}=${data[key]}&`
+        }
+      }
+
+      str = str.slice(0, -1)
+
+      xhr.open("GET", url+'?'+str)
+
+      xhr.responseType = 'json'
+
+      xhr.send()
+
+    }
+
+    // 第一次请求
+    sendAjaxGet(
+      'http://127.0.0.1:8081/test_jquery_get',
+      {a:'aa',b:'bb'},
+      (value) => {
+        console.log('1:成功的返回值：', value)
+        sendAjaxGet(
+          'http://127.0.0.1:8081/test_jquery_get',
+          {a:'aa',b:'bb'},
+          (value) => {
+            console.log('2:成功的返回值：', value)
+            sendAjaxGet(
+              'http://127.0.0.1:8081/test_jquery_get',
+              {a:'aa',b:'bb'},
+              (value) => {
+                console.log('3:成功的返回值：', value)
+                sendAjaxGet(
+                  'http://127.0.0.1:8081/test_jquery_get',
+                  {a:'aa',b:'bb'},
+                  (value) => {
+                    console.log('4:成功的返回值：', value)
+                    sendAjaxGet(
+                      'http://127.0.0.1:8081/test_jquery_get',
+                      {a:'aa',b:'bb'},
+                      (value) => {
+                        console.log('5:成功的返回值：', value)
+                      },
+                      (err) => {
+                        console.log('失败的原因：', err)
+                      }
+                    )
+                  },
+                  (err) => {
+                    console.log('失败的原因：', err)
+                  }
+                )
+              },
+              (err) => {
+                console.log('失败的原因：', err)
+              }
+            )
+          },
+          (err) => {
+            console.log('失败的原因：', err)
+          }
+        )
+      },
+      (err) => {
+        console.log('失败的原因：', err)
+      }
+    )
+  </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    //==========================================================================================================================================
+    /*
+    问：为什么要使用promise实例的链式调用的错误穿透方法？
+    答：因为如果都要在每个 promise实例.then(fulfilledCallback, rejectedCallback) 方法 rejectedCallback 里
+       写同样的 【中断promise链式调用】，就在不人性了
+       所以【catch的错误穿透】 就相当于 【中断promise链式调用】 的语法糖
+    理解：const p = new Promise((resolve, reject) => reject(reason));
+         p.then(fulfilled).then(fulfilled, rejectd) 如果p第一个 then 没有指定失败的回调
+         就会去下一个链式调用的 then 里找，如果这个 then 里面还是没有，就会继续往后找，
+         看最后有没有链式调用 catch(rejectedCallBack)，有则被 catch 里的失败的回调兜到底，不会报错
+         如果没有 catch(rejectedCallBack) 就会抛出异常 Uncaught (in promise) reason
+    */
+    const p = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        // resolve('p的状态为：fulfilled')
+        reject('p的状态为：rejected')
+      }, 1000);
+    })
+    const pp = p.then( // p 自身上的 一组回调队列 p.list: 【【fulfilled:func, undefined】】
+      value => {
+        console.log(value)
+      }
+    )
+    const ppp = pp.then( // pp 自身上的 一组回调队列 pp.list: 【【fulfilled:func, rejected:func】】
+      value => {
+        console.log(value)
+      },
+      // reason => {
+      //   console.log('p:', p)
+      //   console.log('pp:', pp)
+      //   console.log(reason)
+      // }
+    )
+    ppp.catch(// ppp 自身上的 一组回调队列 ppp.list: 【【 rejected:func】】
+      reason => console.log('错误穿透',reason)
+    )
+    //==========================================================================================================================================
+    
+    
+    
+  </script>
+</body>
+</html>

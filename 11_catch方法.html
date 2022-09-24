@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    //==========================================================================================================================================
+    /*
+    问：catch 方法在哪？
+    答：Promise.prototype.catch
+          所以所有的 promise 实例可以访问到
+    */
+    /* console.log(Promise.prototype.catch) // ƒ catch() { [native code] } */
+    //==========================================================================================================================================
+    
+    
+    //==========================================================================================================================================
+    /*
+    问：catch 方法，是 then 方法的，哪种传参方式的语法糖
+    答：是 then 该种传参方式的语法糖 ----> then(undefined, (reason) => {}) 
+    */
+    /* const p = new Promise((resolve, reject) => {
+      reject('状态切为 rejected; ')
+    })
+    p.catch(
+      (reason) => console.log(reason, p) // 状态切为 rejected;  Promise {<rejected>: '状态切为 rejected'}
+    )
+    // 以上方式等同于以下方式
+    p.then(
+      undefined,
+      (reason) => console.log(reason, p) // 状态切为 rejected;  Promise {<rejected>: '状态切为 rejected; '}
+    ) */
+    //==========================================================================================================================================
+    
+    
+    //==========================================================================================================================================
+    /*
+    问：以下代码为什么会报错 【Uncaught (in promise) 状态切为-->rejected; 】
+    答：因为 p 会多次调用（then catch）管理的回调【p调几次，相应的回调就执行几次】
+        下面的 p 状态已经切换成 rejected 了， 但第一组回调【即then管理的回调】
+        并没有指定失败的回调，所以就抛出以上错误了
+    */
+    const p = new Promise((resolve, reject) => {
+      // resolve('状态切为-->fulfilled; ')
+      reject('状态切为-->rejected; ')
+    })
+    p.then(()=>{}) // 这一行会报错：Uncaught (in promise) 状态切为-->rejected; 
+    p.catch((reason) => console.log(reason)) // 状态切为-->rejected; 
+    //==========================================================================================================================================
+    
+    
+    
+  </script>
+</body>
+</html>
